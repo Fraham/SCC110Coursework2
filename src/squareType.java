@@ -3,5 +3,5 @@
  */
 public enum squareType 
 {
-	BISHOP, EMPTYSQUARE, KING, KNIGHT, PAWN, QUEEN, ROOK, SELECTEDSQUARE;
+	BISHOP, EMPTYSQUARE, KING, KNIGHT, PAWN, QUEEN, ROOK, SELECTEDSQUARE;	// used to know what type the square is.
 }

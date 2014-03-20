@@ -1,7 +1,5 @@
 import javax.swing.*;
 
-
-
 /**
  * Holds the information for each square.
  * 
@@ -12,9 +10,11 @@ public class ChessSquare
 	private int x, y; 							// Holds the coordinates of the square, used to find the right square while searching from a click event. The coordinates start in the top left square
 	private squareType type; 					// Holds the type of square, used to check where the square can move and for where other squares can move.
 	private JButton btnSquare;					// Holds the square information, which is displayed on the chess board.
-		
+
 	/**
 	 * Generates a new instance of a chess square.
+	 * 
+	 * Uses _location to work out the x and y coordinate values.
 	 * 
 	 * @param _location The location of the square on the board.
 	 * @param _type The type of the square
@@ -23,6 +23,7 @@ public class ChessSquare
 	{
 		y = (int) Math.floor(_location / 8);	// Calculates the y coordinate by using the array index value. So if the index is 7, the y value will be 0.
 		x = _location - (8 * y);				// Calculates the y coordinate by using the array index value minus the just calculated y value.
+		
 		type = _type;							// Sets the square type to the right chess piece.
 		btnSquare = new JButton();				// Creates a new button for the square.
 		updateSquareImage();					// Updates the icon for the new square.
@@ -35,7 +36,7 @@ public class ChessSquare
 	 */
 	public int getX()
 	{
-		return x;
+		return x;						// returns the x value of the square.
 	}
 	
 	/**
@@ -45,7 +46,7 @@ public class ChessSquare
 	 */
 	public int getY()
 	{
-		return y;
+		return y;						// returns the y value of the square.
 	}
 	
 	/**
@@ -55,17 +56,7 @@ public class ChessSquare
 	 */
 	public squareType getSquareType()
 	{
-		return type;
-	}
-	
-	/**
-	 * Returns the button of square of the square on the board.
-	 * 
-	 * @return The button of square of the square on the board.
-	 */
-	public JButton getSquare()
-	{
-		return btnSquare;
+		return type;					// returns the square type.
 	}
 	
 	/**
@@ -75,19 +66,21 @@ public class ChessSquare
 	 */
 	public JButton getButton()
 	{
-		return btnSquare;
+		return btnSquare;				// returns the button form the square.
 	}
 
 	/**
 	 * Sets the type of the square.
 	 * 
-	 * @param _type The square type.
+	 * Uses the square types from squareType.
+	 * 
+	 * @param _type The square type to be set to the square.
 	 */
 	public void setSquareType(squareType _type)
 	{
-		type = _type;
+		type = _type;					// sets the new square type.
 		
-		updateSquareImage();
+		updateSquareImage();			// updates the button icon.
 	}
 	
 	/**
@@ -99,11 +92,11 @@ public class ChessSquare
 		
 		switch (type) 																// switch using the current square type.
 		{
-			case EMPTYSQUARE: // if the square type is empty.
+			case EMPTYSQUARE: 														// if the square type is empty.
 				i = new ImageIcon(getClass().getResource("EmptySquare.jpg")); 		// load the empty image into the image icon.
 				break;
 			
-			case BISHOP: // if the square type is bishop
+			case BISHOP: 															// if the square type is bishop
 				i = new ImageIcon(getClass().getResource("Bishop.jpg")); 			// load the bishop image into the image icon.
 				break;
 				
@@ -131,16 +124,18 @@ public class ChessSquare
 				i = new ImageIcon(getClass().getResource("SelectedSquare.jpg"));
 				break;
 				
-			default: // if there value is not right then it will be set to empty.
+			default: 																// if there value is not right then it will be set to empty.
 				i = new ImageIcon(getClass().getResource("EmptySquare.jpg"));
 				break;
 		}
 		
-		btnSquare.setIcon(i);
+		btnSquare.setIcon(i);														// sets the button icon to the correct type.
 	}
 	
 	/**
 	 * Clears a selected square.
+	 * 
+	 * Sets the square to the empty type.
 	 */
 	public void clearSelected()
 	{
@@ -149,6 +144,8 @@ public class ChessSquare
 	
 	/**
 	 * Moves the piece in the square to a new location.
+	 * 
+	 * It changes the new square to the old square type and then changes the square type to empty.
 	 * 
 	 * @param newSquare The new square.
 	 */
@@ -161,6 +158,8 @@ public class ChessSquare
 	
 	/**
 	 * Sets all the valid squares.
+	 * 
+	 * Goes through all the squares and changes the icon of the valid squares to the selected type.
 	 * 
 	 * @param newSquares The array of squares.
 	 */
@@ -184,17 +183,17 @@ public class ChessSquare
 	 * @param newSquareArray The array of squares.
 	 * @return If the piece can move to the other square or not.
 	 */
-	public boolean canMoveTo(ChessSquare newSquare, ChessSquare[] newSquareArray)
+	private boolean canMoveTo(ChessSquare newSquare, ChessSquare[] newSquareArray)
 	{
 		if (newSquare.getSquareType() == squareType.EMPTYSQUARE ||newSquare.getSquareType() == squareType.SELECTEDSQUARE)
 		{
 			switch(type) 												// switching the type of the square
 			{
-				case PAWN: 												//casing each different square type.
+				case PAWN: 												// casing each different square type.
 					return pawnValidMove(newSquare); 					// running the right method for each square type.
 					
 				case BISHOP:					
-					return bishopValidMove(newSquare, newSquareArray);
+					return bishopValidMove(newSquare, newSquareArray);	// the full array is needed to check the whole range of squares across the board.
 					
 				case KING:					
 					return kingValidMove(newSquare);
@@ -408,7 +407,7 @@ public class ChessSquare
 	private boolean moveDiagonally(ChessSquare newSquare, ChessSquare[] newSquareArray)
 	{
 		int xDistance  = Math.abs(x - newSquare.getX()), yDistance = Math.abs(y - newSquare.getY()); 
-		// get the absolute distance between the squares for both x and y.
+																// get the absolute distance between the squares for both x and y.
 		
 		if (xDistance == yDistance) 							// if the square is on the diagonal line.
 		{
@@ -468,19 +467,19 @@ public class ChessSquare
 					{
 						int index = (8 * i) + newSquare.getX() + count; // the (8 * i), i is the y coordinate, the end finds the x coordinate.
 						
-						count++; 										//increment count
+						count++; 										// increment count
 						
 						if (newSquareArray[index].getSquareType() != squareType.EMPTYSQUARE && newSquareArray[index].getSquareType() != squareType.SELECTEDSQUARE)
-																		//checks if the square is a chess piece
+																		// checks if the square is a chess piece
 						{
 							return false;
 						}
 					}					
 				}
 			}
-			return true;
+			return true;												// return true, as the square is a valid movement.
 		}
 		
-		return false;
+		return false;													// return false, as the square is not in the diagonal.
 	}
 }
